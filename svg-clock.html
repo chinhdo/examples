@@ -97,7 +97,7 @@
       <text id="text3" x="50" y="65" dominant-baseline="middle" text-anchor="middle">
         <tspan x="50%" dy="1em">SUPERLATIVE CHRONOMETER</tspan>
         <tspan x="50%" dy="2em">OFFICIALLY CERTIFIED</tspan>
-        <tspan id="secondsHandMode" x="50%" dy="2.4em" onclick="secondsHandModeClick()">TICK</tspan>
+        <tspan id="secondsHandMode" x="50%" dy="2.4em" onclick="secondsHandModeClick()">CONT</tspan>
       </text>
 
       <rect class="secondsHandMode" x="46.25" y="73.25" width="7.5" height="3" fill="none" stroke="blue" stroke-width="0.1"></rect>
@@ -115,7 +115,7 @@
   </div>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
   <script>
-    let secondsHandMode = "tick";
+    let secondsHandMode = $("#secondsHandMode").text().toLowerCase();
     let timer;
 
     $(function () {
