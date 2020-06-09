@@ -154,7 +154,8 @@
         timer = setTimeout(animate, 1000 - now.getMilliseconds());
       }
       else {
-        timer = setTimeout(animate, 10);
+        const marker = now.getMilliseconds() % 25;
+        timer = setTimeout(animate, marker);
       }
     }
   </script>
