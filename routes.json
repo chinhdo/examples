@@ -1,0 +1,9 @@
+{
+  "routes": [
+    {
+      "route": "/svg-clock.html",
+      "serve": "/analog-clock.html",
+      "statusCode": 301
+    }
+  ]
+}
