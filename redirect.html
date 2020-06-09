@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>Test page</title>
+  <style>
+    html,
+    body {
+      font-size: 20px;
+    }
+
+    h1 {
+      font-size: 1.75rem;
+    }
+
+    .container {
+      padding: 10px;
+    }
+
+    .logo img {
+      max-width: 200px;
+    }
+
+    #seconds {
+      font-weight: bold;
+      color: red;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <h1><span id="source">This page</span> has been moved</h1>
+    <p>Please update your bookmarks with the new address <b>https://www.chinhdo.com</b>.</p>
+    <p>You will be automatically redirected to the new page in <span id="seconds">10</span> seconds. Or
+      click <a href="https://www.chinhdo.com">here</a> to go there now.</p>
+  </div>
+  <script>
+    var destUrl = "https://www.chinhdo.com/";
+
+
+    function countdown() {
+      var span = document.getElementById("seconds");
+      var seconds = parseInt(span.innerHTML);
+      if (seconds > 0) {
+        span.innerHTML = seconds - 1;
+        setTimeout(() => countdown(), 1000);
+      } else {
+        console.log("Redirecting to " + destUrl + ".");
+        window.location.href = destUrl;
+      }
+    }
+
+    window.onload = () => {
+      countdown();
+    };
+
+  </script>
+</body>
+
+</html>
