@@ -1,0 +1,184 @@
+<!doctype html>
+
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+
+  <title>The HTML5 Herald</title>
+  <meta name="description" content="SVG">
+  <meta name="author" content="Chinh Do">
+  <style>
+    /* RESET */
+    /* Box sizing rules */
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+    }
+
+    /* Remove default padding */
+    ul[class],
+    ol[class] {
+      padding: 0;
+    }
+
+    /* Remove default margin */
+    body,
+    h1,
+    h2,
+    h3,
+    h4,
+    p,
+    ul[class],
+    ol[class],
+    li,
+    figure,
+    figcaption,
+    blockquote,
+    dl,
+    dd {
+      margin: 0;
+    }
+
+    /* Set core body defaults */
+    body {
+      min-height: 100vh;
+      scroll-behavior: smooth;
+      text-rendering: optimizeSpeed;
+      line-height: 1.5;
+    }
+
+    /* Remove list styles on ul, ol elements with a class attribute */
+    ul[class],
+    ol[class] {
+      list-style: none;
+    }
+
+    /* A elements that don't have a class get default styles */
+    a:not([class]) {
+      text-decoration-skip-ink: auto;
+    }
+
+    /* Make images easier to work with */
+    img {
+      max-width: 100%;
+      display: block;
+    }
+
+    /* Natural flow and rhythm in articles by default */
+    article>*+* {
+      margin-top: 1em;
+    }
+
+    /* Inherit fonts for inputs and buttons */
+    input,
+    button,
+    textarea,
+    select {
+      font: inherit;
+    }
+
+    /* Remove all animations and transitions for people that prefer not to see them */
+    @media (prefers-reduced-motion: reduce) {
+      * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
+    }
+
+    html,
+    body {
+      font-family: sans-serif;
+      letter-spacing: 0.2rem;
+    }
+
+    #myDiv {
+      width: 100vw;
+      height: 100vh;
+      background-color: #e0e0e0;
+    }
+
+    #text1 {
+      fill: #8e82a2;
+      font-size: 0.5rem;
+      letter-spacing: 0.2rem;
+      font-family: 'Times New Roman', Times, serif;
+    }
+
+    #text2 {
+      fill: #8e82a2;
+      font-size: 0.15rem;
+      letter-spacing: 0.02rem;
+    }
+
+    #text3 {
+      fill: #8e82a2;
+      font-size: 0.125rem;
+      letter-spacing: 0.02rem;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="myDiv">
+    <svg id="svg" width="100%" height="100%" viewbox="0 0 100 100">
+      <defs>
+        <radialGradient id="grad1" cx="50%" cy="50%" r="50%" fx="50%" fy="50%">
+          <stop offset="0%" style="stop-color:white" />
+          <stop offset="100%" style="stop-color:#dddddd" />
+        </radialGradient>
+      </defs>
+      <g>
+        <polygon points="25 0, 75 0, 85 50, 75 100, 25 100, 15 50" style="fill:#c6c5cc" />
+        <circle id="circle" style="stroke: #606060; stroke-width: 1" cx="50" cy="50" r="47.5" fill="url(#grad1)""></circle>
+      </g>      
+
+      <text id="text1" x="50%" y="15%" dominant-baseline="middle" text-anchor="middle">
+        <tspan x="50%" dy="1.5em">OLEX</tspan>
+      </text>
+      <text id="text2" x="50%" y="30%" dominant-baseline="middle" text-anchor="middle">
+        <tspan x="50%" dy="1.5em">OYSTER-PERPETUAL</tspan>
+        <tspan x="50%" dy="1.5em">DATEADJUST</tspan>
+      </text>
+      <text id="text3" x="50%" y="65%" dominant-baseline="middle" text-anchor="middle">
+        <tspan x="50%" dy="1em">SUPERLATIVE CHRONOMETER</tspan>
+        <tspan x="50%" dy="2em">OFFICIALLY CERTIFIED</tspan>
+      </text>
+
+      <g>
+        <polygon id="hoursHand" points="48 55, 52 55, 51 22, 49 22" style="fill:black" transform="rotate (15 50 50)" />
+        <polygon id="minutesHand" points="48.5 57, 51.5 57, 50.5 13, 49.5 13" style="fill:black"
+          transform="rotate (30 50 50)" />
+        <polygon id="secondHand" points="49.5 57, 50.5 57, 50.15 8, 49.85 8" style="fill:black"
+          transform="rotate (90 50 50)" />
+      </g>
+      <circle id="center" style="fill:#d7d6dd; stroke: #262634; stroke-width: 0.5;" cx="50" cy="50" r="2"></circle>
+    </svg>
+  </div>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script>
+    $(function () {
+      var svg = document.getElementById("svg");
+      for (let i = 0; i < 12; i++) {
+        var p = document.createElementNS("http://www.w3.org/2000/svg", "polygon");
+        p.setAttribute("points", "49.25 5, 50.75 5, 50.25 7, 49.75 7");
+        p.setAttribute("style", "fill:#606060");
+        const angle = (i + 1) * 30;
+        p.setAttribute("transform", `rotate(${angle} 50 50)`)
+        svg.appendChild(p);
+
+        setInterval(() => {
+          const now = new Date();
+          $("#secondHand").attr("transform", `rotate (${now.getSeconds() * (360 / 60)} 50 50)`);
+          $("#minutesHand").attr("transform", `rotate (${now.getMinutes() * (360 / 60)} 50 50)`);
+          $("#hoursHand").attr("transform", `rotate (${now.getHours() * (360 / 12)} 50 50)`);
+        }, 1000);
+      }
+    });
+  </script>
+</body>
+
+</html>
