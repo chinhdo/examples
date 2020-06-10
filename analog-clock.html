@@ -142,6 +142,8 @@
     }
 
     function newFrame() {
+      
+
       const now = new Date();
       $("#secondHand").attr("transform", `rotate (${(now.getSeconds() + now.getMilliseconds() / 1000) * (360 / 60)} 50 50)`);
       $("#minuteHand").attr("transform", `rotate (${(now.getMinutes() + (now.getSeconds() / 60) + (now.getMilliseconds() / 60000)) * (360 / 60)} 50 50)`);
