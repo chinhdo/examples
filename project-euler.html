@@ -88,11 +88,11 @@
     $(function () {
       p1();
       p2();
-      p3();
-      p4();
+      p3LargestPrimeFactor();
+      p4LargestPalindrome();
     });
 
-    function p4() {
+    function p4LargestPalindrome() {
       let max = 0;
       for (let i = 999; i >= 100; i--) {
         for (let j = 999; j >= 100; j--) {
@@ -111,13 +111,15 @@
       $("#p4").text(max);
     }
 
-    function p3() {
+    // The prime factors of 13195 are 5, 7, 13 and 29. What is the largest prime factor of the number 600851475143 ?
+    function p3LargestPrimeFactor() {
       let x = 600851475143;
       let y = 2;
+      let factor = 0;
 
       while (true) {
         if (x % y === 0 && isPrime(y)) {
-          // console.log(y);
+          factor = y;
         }
 
         y++;
@@ -125,7 +127,7 @@
         if (y > Math.sqrt(x)) break;
       }
 
-      $("#p3").text(y);
+      $("#p3").text(factor);
     }
 
     function p1() {
