@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+
+  <title>TODO</title>
+  <meta name="description" content="TODO" />
+  <meta name="author" content="Chinh Do" />
+  <link href="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.css" rel="stylesheet" />
+  <script src="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.js"></script>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
+    rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/p5@1.0.0/lib/p5.js"></script>
+  <style>
+    /* RESET */
+    /* Box sizing rules */
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      font-family: "Roboto", sans-serif;
+      margin: 0;
+      background-color: #222222;
+      color: white;
+      text-align: center;
+    }
+
+    li {
+      padding: 2px;
+    }
+
+    h1 {
+      font-size: 1.5rem;
+    }
+
+    .container {
+      padding: 5px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <h1>Template</h1>
+  </div>
+  <script>
+    float r, t;
+    void setup(){ size(720, 720); stroke(-1); }
+    void draw(){
+      clear();
+      t += .003;
+      for (r = 0; r < TAU; r += PI / 5)
+        f(360, 360, r, 126);
+    }
+    void f(float x, float y, float r, float d){
+      if (d > 3) {
+        line(x, y, x += cos(r) * d, y += sin(r) * d);
+        f(x, y, r + tan(d) + t, d * .7);
+        f(x, y, r - tan(d) - t, d * .7);
+      }
+    }
+  </script>
+</body>
+
+</html>
