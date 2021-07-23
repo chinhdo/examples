@@ -61,7 +61,7 @@
     </div>
     <script>
       let theta;
-      let x = 0;
+      let x = 250;
       let goRight = true;
 
       function setup() {
@@ -84,7 +84,7 @@
         }
 
         background("#222222");
-        frameRate(24);
+        frameRate(30);
         stroke(255);
 
         let a = (x / width) * 90;
@@ -107,7 +107,7 @@
       function branch(h, w) {
         // Each branch will be 2/3rds the size of the previous one
         // h *= 0.66;
-        h *= 0.66;
+        h *= 0.64;
 
         // All recursive functions must have an exit condition!!!!
         // Here, ours is when the length of the branch is 2 pixels or less
@@ -128,8 +128,6 @@
           translate(0, -h);
           branch(h, w * 0.5);
           pop();
-        } else {
-          // p.ellipse(0, 0, 2, 2);
         }
       }
     </script>
