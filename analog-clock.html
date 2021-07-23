@@ -106,8 +106,8 @@
       <rect class="secondsHandMode" x="46.25" y="73.25" width="7.5" height="3" fill="none" stroke="blue" stroke-width="0.1"></rect>
 
       <g>
-        <polygon id="hoursHand" points="48 56, 52 56, 51 22, 49 22" style="fill:#404040" transform="rotate (15 50 50)" />
-        <polygon id="minutesHand" points="48.5 56, 51.5 56, 50.5 13, 49.5 13" style="fill:black"
+        <polygon id="hourHand" points="48 56, 52 56, 51 22, 49 22" style="fill:#404040" transform="rotate (15 50 50)" />
+        <polygon id="minuteHand" points="48.5 56, 51.5 56, 50.5 13, 49.5 13" style="fill:black"
           transform="rotate (0 50 50)" />
         <polygon id="secondHand" points="49.5 57, 50.5 57, 50.15 8, 49.85 8" style="fill:black"
           transform="rotate (0 50 50)" />
@@ -142,17 +142,14 @@
     }
 
     function newFrame() {
-      if (timer) {
-        clearTimeout(timer);
-      }
-
-      let now = new Date();
-      $("#secondHand").attr("transform", `rotate (${(now.getSeconds() + now.getMilliseconds() / 1000) * (360 / 60)} 50 50)`);
-      $("#minutesHand").attr("transform", `rotate (${(now.getMinutes() + (now.getSeconds() / 60) + (now.getMilliseconds() / 60000)) * (360 / 60)} 50 50)`);
-      $("#hoursHand").attr("transform", `rotate (${(now.getHours() + (now.getMinutes() / 60) 
-        + (now.getSeconds() / 3600.0 )) * (360 / 12)} 50 50)`);
       
-      now = new Date();
+
+      const now = new Date();
+      $("#secondHand").attr("transform", `rotate (${(now.getSeconds() + now.getMilliseconds() / 1000) * (360 / 60)} 50 50)`);
+      $("#minuteHand").attr("transform", `rotate (${(now.getMinutes() + (now.getSeconds() / 60) + (now.getMilliseconds() / 60000)) * (360 / 60)} 50 50)`);
+      $("#hourHand").attr("transform", `rotate (${(now.getHours() + (now.getMinutes() / 60) 
+        + (now.getSeconds() / 3600.0 )) * (360 / 12)} 50 50)`);
+
       if (secondsHandMode === "tick") {
         timer = setTimeout(newFrame, 1000 - now.getMilliseconds());
       }
