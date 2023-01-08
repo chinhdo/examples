@@ -14,48 +14,49 @@
 <body>
   <div id="myDiv">
     <div id="desc">
-      <h1>Chinh Do's Bedroom Clock</h1>
+      <h1>Chinh Do's Bedroom / Night Clock</h1>
       <p>A clock in dark mode (dark background), and seconds Hand. Click on TICK/CONT to change the movement
         mode of the Seconds hand.</p>
-  </div>
-  <svg id="svg" viewbox="0 0 100 100">
-    <g>
-      <circle id="circle" cx="50" cy="50" r="47.5"></circle>
-    </g>
+      <p id="debug"></p>
+    </div>
+    <svg id="svg" viewbox="0 0 100 100">
+      <g>
+        <circle id="circle" cx="50" cy="50" r="47.5"></circle>
+      </g>
 
-    <text class="digital" x="34" y="67" dominant-baseline="middle" text-anchor="middle">
-      <tspan id="digital-hour">00</tspan>
-    </text>
+      <text class="digital" x="34" y="75" dominant-baseline="middle" text-anchor="middle">
+        <tspan id="digital-hour">00</tspan>
+      </text>
 
-    <text class="digital" x="50" y="67" dominant-baseline="middle" text-anchor="middle">
-      <tspan id="digital-colon">:</tspan>
-    </text>
+      <text class="digital" x="50" y="71.5" dominant-baseline="middle" text-anchor="middle">
+        <tspan id="digital-colon">:</tspan>
+      </text>
 
-    <text class="digital" x="66" y="67" dominant-baseline="middle" text-anchor="middle">
-      <tspan id="digital-minute">00</tspan>
-    </text>
+      <text class="digital" x="66" y="75" dominant-baseline="middle" text-anchor="middle">
+        <tspan id="digital-minute">00</tspan>
+      </text>
 
-    <text class="digital" x="58" y="40" dominant-baseline="middle" text-anchor="middle">
-      <tspan id="digital-ampm">AM</tspan>
-    </text>
+      <text class="digital" x="58" y="40" dominant-baseline="middle" text-anchor="middle">
+        <tspan id="digital-ampm">AM</tspan>
+      </text>
 
-    <text x="43.25" y="40" dominant-baseline="middle" text-anchor="middle">
-      <tspan id="mode-button" onclick="secondsHandModeClick()">TICK</tspan>
-    </text>
+      <text x="43.25" y="40" dominant-baseline="middle" text-anchor="middle">
+        <tspan id="mode-button" onclick="secondsHandModeClick()">TICK</tspan>
+      </text>
 
-    <g>
-      <polygon id="hourHand" points="48 56, 52 56, 51 30, 49 30" transform="rotate (15 50 50)" />
-      <polygon id="minuteHand" points="49.5 56, 50.5 56, 50.15 13, 49.85 13" transform="rotate (45 50 50)" />
-      <polygon id="secondHand" points="49.90 57, 50.10 57, 50.10 10, 49.90 10" transform="rotate (0 50 50)" />
-    </g>
+      <g>
+        <polygon id="hourHand" points="48 56, 52 56, 51 30, 49 30" transform="rotate (15 50 50)" />
+        <polygon id="minuteHand" points="49.5 56, 50.5 56, 50.15 13, 49.85 13" transform="rotate (45 50 50)" />
+        <polygon id="secondHand" points="49.90 57, 50.10 57, 50.10 10, 49.90 10" transform="rotate (0 50 50)" />
+      </g>
 
-    <circle id="center" cx="50" cy="50" r="2"></circle>
-  </svg>
+      <circle id="center" cx="50" cy="50" r="2"></circle>
+    </svg>
   </div>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
   <script>
     let secondsHandMode = $("#mode-button").text().toLowerCase();
-    let timer;
+    let timer;    
 
     $(function () {
       var svg = document.getElementById("svg");
@@ -80,6 +81,7 @@
 
     function newFrame() {
       const now = new Date();
+
       $("#secondHand").attr("transform", `rotate (${(now.getSeconds() + now.getMilliseconds() / 1000) * (360 / 60)} 50 50)`);
       $("#minuteHand").attr("transform"
         , `rotate (${(now.getMinutes() + (now.getSeconds() / 60) + (now.getMilliseconds() / 60000)) * (360 / 60)} 50 50)`);
@@ -98,8 +100,12 @@
 
     function updateDigitalClock() {
       var date = new Date();
-      var time = date.toLocaleTimeString();
-      var time = date.toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true });
+      var time = date.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true });
+      // Fix for old iPad Mini
+      if (time.substring(1, 2) == ":") {
+        time = "0" + time;
+      }
+
       document.getElementById("digital-hour").innerHTML = time.substring(0, 2);
       document.getElementById("digital-minute").innerHTML = time.substring(3, 5);
       document.getElementById("digital-ampm").innerHTML = time.substring(9, 11);
