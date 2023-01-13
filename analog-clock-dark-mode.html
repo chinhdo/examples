@@ -1,0 +1,101 @@
+<!doctype html>
+<html>
+
+<head>
+  <style>
+    /* Style the clock */
+    #clock {
+      width: 300px;
+      height: 300px;
+      background-color: #333;
+      border-radius: 50%;
+      box-shadow: 0 0 10px #333;
+      margin: 50px auto;
+      position: relative;
+    }
+
+    /* Style the hands */
+    #clock #hour {
+      width: 10px;
+      height: 50%;
+      background-color: white;
+      border-radius: 10px;
+      position: absolute;
+      top: 25%;
+      left: 50%;
+      transform-origin: center top;
+    }
+
+    #clock #minute {
+      width: 10px;
+      height: 70%;
+      background-color: white;
+      border-radius: 10px;
+      position: absolute;
+      top: 15%;
+      left: 50%;
+      transform-origin: center top;
+    }
+
+    #clock #second {
+      width: 3px;
+      height: 90%;
+      background-color: white;
+      border-radius: 10px;
+      position: absolute;
+      top: 5%;
+      left: 50%;
+      transform-origin: center top;
+    }
+
+    /* Style the center dot */
+    #clock #center {
+      width: 15px;
+      height: 15px;
+      background-color: white;
+      border-radius: 50%;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      margin: -7.5px 0 0 -7.5px;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- The clock -->
+  <div id="clock">
+    <!-- The hands -->
+    <div id="hour"></div>
+    <div id="minute"></div>
+    <div id="second"></div>
+
+    <!-- The center dot -->
+    <div id="center"></div>
+  </div>
+
+  <!-- JavaScript to update the clock -->
+  <script>
+    // Get the clock elements
+    var clock = document.getElementById("clock");
+    var hour = document.getElementById("hour");
+    var minute = document.getElementById("minute");
+    var second = document.getElementById("second");
+
+    // Update the clock every second
+    setInterval(function() {
+      // Get the current time
+      var currentTime = new Date();
+      var h = currentTime.getHours();
+      var m = currentTime.getMinutes();
+      var s = currentTime.getSeconds();
+
+      // Convert the hours to degrees
+      var hDeg = (h / 12) * 360 + (m / 60) * 30;
+      var mDeg = (m / 60) * 360 + (s / 60) * 6;
+      var sDeg = (s / 60) * 360;
+
+      // Rotate the hands
+      hour.style.transform = "rotate(" + hDeg + "deg)";
+      minute.style.transform = "rotate(" + mDeg + "deg)";
+      second.style.transform = "rotate(" +
