@@ -5,3 +5,5 @@ To run:
 ```
 live-server
 ```
+
+or ```npx http-server```

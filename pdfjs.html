@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Test PDF.js Viewer</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.12.313/pdf.min.js"></script>
+</head>
+
+<body class="p-5">
+    <h1 class="text-3xl font-bold mb-4">Test PDF Viewer Using pdfjs</h1>
+    <div id="pdf-renderer" class="w-full"></div>
+
+    <script>
+        // Configuration
+        pdfjsLib.GlobalWorkerOptions.workerSrc = "https://cdn.jsdelivr.net/npm/pdfjs-dist@2.12.313/build/pdf.worker.min.js";
+
+        // Load your PDF
+        var loadingTask = pdfjsLib.getDocument('test.pdf');
+        loadingTask.promise.then(function (pdf) {
+            console.log('PDF loaded');
+
+            // Get total pages
+            var totalPages = pdf.numPages;
+            console.log(`Total pages: ${totalPages}`);
+
+            for (let pageNum = 1; pageNum <= totalPages; pageNum++) {
+                // Fetch each page
+                pdf.getPage(pageNum).then(function (page) {
+                    console.log(`Page ${pageNum} loaded`);
+
+                    var scale = 0.85;
+                    var viewport = page.getViewport({ scale: scale });
+
+                    var p = document.createElement("p");
+                    p.id = `p${pageNum}`
+                    var text = document.createTextNode(`Page ${pageNum} (loading...)`);
+                    p.appendChild(text);
+                    document.getElementById('pdf-renderer').appendChild(p);
+
+                    // Prepare canvas and render contexts
+                    var canvas = document.createElement('canvas');
+                    var context = canvas.getContext('2d');
+                    canvas.height = viewport.height;
+                    canvas.width = viewport.width;
+                    canvas.style.marginBottom = '20px';
+                    canvas.style.marginTop = '10px';
+
+                    document.getElementById('pdf-renderer').appendChild(canvas);
+
+                    // Render PDF page into canvas context
+                    var renderContext = {
+                        canvasContext: context,
+                        viewport: viewport
+                    };
+
+                    var renderTask = page.render(renderContext);
+                    renderTask.promise.then(function () {
+                        var p = document.getElementById(`p${pageNum}`);
+                        p.innerText = `Page ${pageNum}`;
+                        console.log(`Page ${pageNum} rendered`);
+                    });
+                });
+            }
+        }, function (reason) {
+            // PDF loading error
+            console.error(reason);
+        });
+
+    </script>
+</body>
+
+</html>
