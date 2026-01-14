@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>2026 Calendar - Retirement Countdown</title>
+  <!-- <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet"> -->
+   <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .crossed-out { text-decoration: line-through; color: #a0aec0; }
+    .retirement { background: #fbbf24; color: #1a202c !important; font-weight: bold; border-radius: 0.375rem; }
+    .today { background: #3b82f6; color: #fff !important; font-weight: bold; border-radius: 0.375rem; box-shadow: 0 0 0 2px #2563eb; }
+    .month-first { background: rgba(148, 163, 184, 0.22); color: #e5e7eb !important; border-radius: 0.375rem; }
+  </style>
+</head>
+<body class="bg-slate-950 text-gray-100 min-h-screen">
+  <div class="container mx-auto py-10">
+    <h1 class="text-2xl font-bold mb-10 text-center">2026 Calendar</h1>
+    <div id="calendar" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+
+    <div class="mt-10">
+      <div class="mx-auto max-w-xl bg-gray-900/60 border border-white/10 rounded-lg px-4 py-3 text-center">
+        <div class="text-xs uppercase tracking-wide text-gray-400">Countdown to Retirement (Oct 1, 2026)</div>
+        <div id="bottom-countdown" class="mt-1 text-lg font-semibold tabular-nums"></div>
+      </div>
+    </div>
+
+    <div class="mt-4">
+      <div class="mx-auto max-w-xl bg-gray-900/60 border border-white/10 rounded-lg px-4 py-3 text-center">
+        <div class="text-xs uppercase tracking-wide text-gray-400">Countdown to Oct 1, 2043</div>
+        <div id="bottom-countdown-2043" class="mt-1 text-lg font-semibold tabular-nums"></div>
+      </div>
+    </div>
+  </div>
+  <script>
+    // Use the real current date
+    const now = new Date();
+    // Only highlight today if it's in 2026
+    const today = (now.getFullYear() === 2026) ? new Date(now.getFullYear(), now.getMonth(), now.getDate()) : null;
+    const retirementDate = new Date(2026, 9, 1); // Oct 1, 2026
+    const months = [
+      'January', 'February', 'March', 'April', 'May', 'June',
+      'July', 'August', 'September', 'October', 'November', 'December'
+    ];
+
+    const msPerDay = 24 * 60 * 60 * 1000;
+
+    function createCalendar(year) {
+      let html = '';
+      for (let m = 0; m < 12; m++) {
+        let firstDay = new Date(year, m, 1);
+        let lastDay = new Date(year, m + 1, 0);
+        html += `<div class="bg-gray-900 rounded-lg shadow p-3">
+          <div class="text-base font-bold mb-1 text-center">${months[m]}</div>
+          <div class="grid grid-cols-7 gap-1 text-[11px] text-center">
+            <div>Sun</div><div>Mon</div><div>Tue</div><div>Wed</div><div>Thu</div><div>Fri</div><div>Sat</div>
+          </div>
+          <div class="grid grid-cols-7 gap-1 mt-1 text-center text-sm">`;
+        // Empty days before first day
+        for (let i = 0; i < firstDay.getDay(); i++) {
+          html += `<div></div>`;
+        }
+        // Days of the month
+        for (let d = 1; d <= lastDay.getDate(); d++) {
+          let date = new Date(year, m, d);
+          let classes = 'py-0.5';
+          let content = d;
+
+          if (today && date < today) {
+            classes += ' crossed-out';
+          }
+
+          const isToday = !!(today &&
+            date.getFullYear() === today.getFullYear() &&
+            date.getMonth() === today.getMonth() &&
+            date.getDate() === today.getDate());
+
+          const isRetirement = (date.getFullYear() === 2026 && date.getMonth() === 9 && date.getDate() === 1);
+
+          const isMonthFirst = (d === 1);
+
+          if (isToday) {
+            classes += ' today';
+            const daysLeft = Math.ceil((retirementDate - today) / msPerDay);
+            content = `${d} <span class='block text-xs font-normal'>(<span class='font-semibold'>${daysLeft}d</span>)</span>`;
+          }
+          else if (isRetirement) {
+            classes += ' retirement';
+            content = '🎉 ' + d;
+          }
+          else if (isMonthFirst) {
+            // Don't highlight month-first dates after retirement
+            if (date <= retirementDate) {
+              classes += ' month-first';
+              const daysLeftFromThis = Math.ceil((retirementDate - date) / msPerDay);
+              content = `${d} <span class='block text-xs font-normal'>(<span class='font-semibold'>${daysLeftFromThis}d</span>)</span>`;
+            }
+          }
+
+          html += `<div class="${classes}">${content}</div>`;
+        }
+        html += `</div></div>`;
+      }
+      return html;
+    }
+
+    function updateBottomCountdown() {
+      // Countdown to start of Oct 1, 2026 in local time
+      const target = new Date(2026, 9, 1, 0, 0, 0, 0);
+      const now = new Date();
+      const el = document.getElementById('bottom-countdown');
+      if (!el) return;
+
+      let diffMs = target - now;
+      if (diffMs <= 0) {
+        el.innerHTML =
+          `<span class="font-semibold">0</span> <span class="text-xs font-normal text-gray-400">days</span> ` +
+          `<span class="font-semibold">0</span> <span class="text-xs font-normal text-gray-400">hours</span> ` +
+          `<span class="font-semibold">0</span> <span class="text-xs font-normal text-gray-400">minutes</span> ` +
+          `<span class="font-semibold">0</span> <span class="text-xs font-normal text-gray-400">seconds</span>`;
+        return;
+      }
+
+      const totalSeconds = Math.floor(diffMs / 1000);
+      const days = Math.floor(totalSeconds / (60 * 60 * 24));
+      const hours = Math.floor((totalSeconds % (60 * 60 * 24)) / (60 * 60));
+      const minutes = Math.floor((totalSeconds % (60 * 60)) / 60);
+      const seconds = totalSeconds % 60;
+
+      el.innerHTML =
+        `<span class="font-semibold">${days}</span> <span class="text-xs font-normal text-gray-400">days</span> ` +
+        `<span class="font-semibold">${hours}</span> <span class="text-xs font-normal text-gray-400">hours</span> ` +
+        `<span class="font-semibold">${minutes}</span> <span class="text-xs font-normal text-gray-400">minutes</span> ` +
+        `<span class="font-semibold">${seconds}</span> <span class="text-xs font-normal text-gray-400">seconds</span>`;
+    }
+
+    function updateBottomCountdown2043() {
+      // Countdown to start of Oct 1, 2043 in local time (days only)
+      const target = new Date(2043, 9, 1, 0, 0, 0, 0);
+      const now = new Date();
+      const el = document.getElementById('bottom-countdown-2043');
+      if (!el) return;
+
+      let diffMs = target - now;
+      if (diffMs <= 0) {
+        el.innerHTML = `<span class="font-semibold">0</span> <span class="text-xs font-normal text-gray-400">days</span>`;
+        return;
+      }
+
+      const totalDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+      el.innerHTML = `<span class="font-semibold">${totalDays}</span> <span class="text-xs font-normal text-gray-400">days</span>`;
+    }
+
+    document.getElementById('calendar').innerHTML = createCalendar(2026);
+    updateBottomCountdown();
+    updateBottomCountdown2043();
+    setInterval(() => {
+      updateBottomCountdown();
+      updateBottomCountdown2043();
+    }, 1000);
+  </script>
+</body>
+</html>
